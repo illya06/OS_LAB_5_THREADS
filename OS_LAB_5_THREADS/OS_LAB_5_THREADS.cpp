@@ -14,10 +14,10 @@ DWORD WINAPI test(LPVOID lparam) {
 
     return 0;
 }
-
+//ass
 void createThreads(int ammount);
 void closeHandles(int ammount);
-
+//asdasdsa
 
 //----------------------
 //GLOBAL VARIABLES
