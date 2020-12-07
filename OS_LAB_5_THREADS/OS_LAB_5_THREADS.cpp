@@ -29,6 +29,8 @@ double* dataArray[16];
 string              program = "C:\\Users\\illyich_\\source\\repos\\OS_LAB_5_CONTOLS\\Debug\\OS_LAB_5_CONTOLS.exe";
 STARTUPINFO         si;
 PROCESS_INFORMATION pi;
+
+double st;
 //----------------------
 
 
@@ -37,10 +39,11 @@ int main()
     int n;
     cout << "ENTER AMMOUNT OF THREADS : ";
     cin >> n;
+    /*cout << "ENTER STEP : ";
+    cin >> st;*/
     createThreads(n);
     runControls();
     WaitForMultipleObjects(n, threads, TRUE, INFINITE);
-    //task11(0.001, -0.5, 0.5);
     closeHandles(n);
 }
 
@@ -73,16 +76,16 @@ void runControls() {
     widestr[bufferlen] = 0;
 
     if (!CreateProcess(
-        NULL,            // Module name 
-        widestr,               // Command line
+        NULL,               // Module name 
+        widestr,            // Command line
         NULL,               // Process handle inheritance
         NULL,               // Thread handle
-        FALSE,              // Handle inheritance
+        TRUE,               // Handle inheritance
         CREATE_NEW_CONSOLE, // Flags
         NULL,               // Use parent's environment block
         NULL,               // Use parent's starting directory 
-        &si,             // Pointer to STARTUPINFO
-        &pi)             // Pointer to PROCESS_INFORMATION
+        &si,                // Pointer to STARTUPINFO
+        &pi)                // Pointer to PROCESS_INFORMATION
         )
     {
         printf("FAILED to createProcess. ERROR_CODE [%d]\n", GetLastError());
