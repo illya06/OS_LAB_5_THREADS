@@ -29,8 +29,7 @@ int main()
     int n;
     cout << "ENTER AMMOUNT OF THREADS : ";
     cin >> n;
-    cout << "ENTER STEP : ";
-    cin >> st;
+    
     createThreads(n);
     runControls();
     auto start = std::chrono::steady_clock::now();
@@ -51,6 +50,16 @@ DWORD WINAPI task11(LPVOID data) {
     for (double i = left; i < right; i += step) {
         x = 1 + i / 3 - i * i / 9 + i * i * i * 5 / 81 - i * i * i * i * 80 / 1944;
         printf("\n \033[36m %d\033[0m -> X: %+.4f | Y: %+.4f ",GetCurrentThreadId(), i, x);
+    }
+    printf("\n\n (\033[32m%d\033[0m) FINISHED!\n", GetCurrentThreadId());
+    return 0;
+}
+
+DWORD WINAPI name(LPVOID data) {
+    int n = (int)data;
+    Sleep(10);
+    for (double i = 0; i < n; i++) {
+        printf("\n \033[36m %d\033[0m -> Shevcuk Illia #001244012 ", GetCurrentThreadId());
     }
     printf("\n\n (\033[32m%d\033[0m) FINISHED!\n", GetCurrentThreadId());
     return 0;
@@ -92,29 +101,64 @@ void runControls() {
 }
 
 void createThreads(int ammount) {
-    double left = -0.9, right = -0.9 + (1.8 / ammount), step = st;
-    for (int i = 0; i < ammount; i++) {
-        dataArray[0] = step;
-        dataArray[1] = left;
-        dataArray[2] = right;
+    int ch;
+    cout << "CHOOSE : (1) - NAME | (2) - TABULATION ";
+    cout << "CHOISE > ";
+    cin >> ch;
 
-        threads[i] = CreateThread(
-            NULL,
-            0,
-            task11,
-            dataArray,
-            CREATE_SUSPENDED,
-            &threadID[i]
-        );
-        if (threads[i] == NULL)
-        {
-            printf("\nClosing program\n\tCouldn`t create thread [%d]",i);
-            ExitProcess(3);
+    if (ch == 1) {
+        int cy;
+        cout << "ENTER AMMOUNTT OF CYCLES : ";
+        cin >> cy;
+        cy = cy / ammount;
+        for (int i = 0; i < ammount; i++) {
+            threads[i] = CreateThread(
+                NULL,
+                0,
+                name,
+                &cy,
+                CREATE_SUSPENDED,
+                &threadID[i]
+            );
+            if (threads[i] == NULL)
+            {
+                printf("\nClosing program\n\tCouldn`t create thread [%d]", i);
+                ExitProcess(3);
+            }
         }
-
-        left = left + (1.8 / ammount);
-        right = right + (1.8 / ammount);
     }
+
+    if (ch == 2) {
+        cout << "ENTER STEP : ";
+        cin >> st;
+        double left = -0.9, right = -0.9 + (1.8 / ammount), step = st;
+
+        for (int i = 0; i < ammount; i++) {
+            dataArray[0] = step;
+            dataArray[1] = left;
+            dataArray[2] = right;
+
+            threads[i] = CreateThread(
+                NULL,
+                0,
+                task11,
+                dataArray,
+                CREATE_SUSPENDED,
+                &threadID[i]
+            );
+            if (threads[i] == NULL)
+            {
+                printf("\nClosing program\n\tCouldn`t create thread [%d]", i);
+                ExitProcess(3);
+            }
+
+            left = left + (1.8 / ammount);
+            right = right + (1.8 / ammount);
+        }
+    }
+    
+
+    
 }
 
 void closeHandles(int ammount) {
