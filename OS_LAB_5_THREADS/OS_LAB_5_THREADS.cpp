@@ -32,6 +32,7 @@ int main()
     
     createThreads(n);
     runControls();
+    Sleep(1000);
     auto start = std::chrono::steady_clock::now();
     WaitForMultipleObjects(n, threads, TRUE, INFINITE);
     auto end = std::chrono::steady_clock::now();
